@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,14 @@ public class TodoController {
   private final TodoService service;
 
   @PostMapping
-  public ResponseEntity<CommonResponse<ResponseTodoDTO>> createTodo(@RequestBody @Valid CreateTodo todo) {
+  public ResponseEntity<CommonResponse<ResponseTodoDTO>> createTodo(@RequestBody @Valid CreateTodo todo
+//      , BindingResult result
+  ) {
+    // 바인딩 리절트의 경우 TypeScript 를 사용할 때 좋다
+    // 하지만 우리는 하지 않는다.
+//    if(result.hasErrors()) {
+//
+//    }
     return ResponseEntity.status(HttpStatus.CREATED).body(CommonResponse.sussess(service.saveTodo(todo)));
   }
 
