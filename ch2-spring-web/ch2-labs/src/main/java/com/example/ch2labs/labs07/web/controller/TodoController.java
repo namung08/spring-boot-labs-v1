@@ -8,6 +8,7 @@ import com.example.ch2labs.labs07.web.dto.common.CommonResponse;
 import com.example.ch2labs.labs07.web.dto.todo.request.CreateTodo;
 import com.example.ch2labs.labs07.web.dto.todo.request.UpdateTodo;
 import com.example.ch2labs.labs07.web.dto.todo.response.ResponseTodoDTO;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/todos")
+@RequestMapping("/api/v1/todos")
 @RequiredArgsConstructor
 public class TodoController {
   private final TodoService service;
 
   @PostMapping
-  public ResponseEntity<CommonResponse<ResponseTodoDTO>> createTodo(@RequestBody CreateTodo todo) {
-    if(todo == null || todo.title() == null || todo.completed() == null || todo.title().isBlank()) {
-      throw new TodoException(TodoExceptionCode.TODO_VALIDATION);
-    }
+  public ResponseEntity<CommonResponse<ResponseTodoDTO>> createTodo(@RequestBody @Valid CreateTodo todo) {
     return ResponseEntity.status(HttpStatus.CREATED).body(CommonResponse.sussess(service.saveTodo(todo)));
   }
 
