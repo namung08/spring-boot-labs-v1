@@ -1,1 +1,8 @@
-spring.application.name=ch2-labs
+spring:
+  application:
+    name: ch2-labs
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
