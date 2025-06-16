@@ -17,4 +17,6 @@ public interface PostMapper {
     Post findById(@Param("id") Long id);
 
     int deleteById(@Param("id") Long id);
+
+    int countBySearch(@Param("req") PostSearchRequest req);
 }

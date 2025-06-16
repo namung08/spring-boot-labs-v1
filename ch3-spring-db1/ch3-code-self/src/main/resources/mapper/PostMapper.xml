@@ -20,6 +20,16 @@
         </where>
         LIMIT #{req.size} offset #{req.offset}
     </select>
+    <select id="countBySearch" parameterType="PostSearchRequest" resultType="integer">
+        select count(*)
+        from posts
+        <where>
+            <if test="req.keyword != null and req.keyword != ''">
+                (title like concat('%', #{req.keyword}, '%')
+                or body like concat('%', #{req.keyword}, '%'))
+            </if>
+        </where>
+    </select>
     <select id="findById" parameterType="long" resultType="Post">
         select *
         from posts
