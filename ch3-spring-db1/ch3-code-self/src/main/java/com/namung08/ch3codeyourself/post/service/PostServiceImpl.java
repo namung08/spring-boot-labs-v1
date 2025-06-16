@@ -15,7 +15,7 @@ public class PostServiceImpl implements PostService {
   @Override
   public PostResponse createPost(PostCreateRequest req) {
     Post createPost = req.toDomain();
-    Post createdPost = mapper.save(createPost);
-    return PostResponse.from(createdPost);
+    mapper.save(createPost);
+    return PostResponse.from(createPost);
   }
 }
