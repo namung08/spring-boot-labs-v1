@@ -23,6 +23,6 @@ public class PostController {
 
   @GetMapping
   public ResponseEntity<List<PostResponse>> getPosts() {
-    return ResponseEntity.status()
+    return ResponseEntity.status(HttpStatus.OK).body(service.getPosts());
   }
 }

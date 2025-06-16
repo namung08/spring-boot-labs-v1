@@ -7,6 +7,8 @@ import com.namung08.ch3codeyourself.web.dto.post.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
@@ -17,5 +19,10 @@ public class PostServiceImpl implements PostService {
     Post createPost = req.toDomain();
     mapper.save(createPost);
     return PostResponse.from(createPost);
+  }
+
+  @Override
+  public List<PostResponse> getPosts() {
+    return mapper.findAll().stream().map(PostResponse::from).toList();
   }
 }

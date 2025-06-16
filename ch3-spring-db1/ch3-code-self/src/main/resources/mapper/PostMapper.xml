@@ -9,4 +9,8 @@
         INSERT INTO posts(title, body)
         values (#{title}, #{body})
     </insert>
+    <select id="findAll" resultType="com.namung08.ch3codeyourself.post.model.Post">
+        select *
+        from posts;
+    </select>
 </mapper>
