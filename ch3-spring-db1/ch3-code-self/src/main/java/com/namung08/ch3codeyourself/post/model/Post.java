@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "posts")
 @NoArgsConstructor
@@ -13,10 +14,8 @@ public class Post {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Setter
   @Column(nullable = false)
   private String title;
-  @Setter
   private String body;
 
 

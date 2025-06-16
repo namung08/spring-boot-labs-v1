@@ -13,4 +13,20 @@
         select *
         from posts;
     </select>
+    <select id="findById" parameterType="long" resultType="Post">
+        select *
+        from posts
+        where id = #{id};
+    </select>
+    <update id="updateById" parameterType="map" >
+        update posts
+        set
+            title = #{post.title},
+            body = #{post.body}
+        where id = #{id}
+    </update>
+    <delete id="deleteById" parameterType="long">
+        delete from posts
+        where id = #{id}
+    </delete>
 </mapper>
