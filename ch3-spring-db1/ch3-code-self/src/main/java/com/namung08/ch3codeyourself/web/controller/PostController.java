@@ -3,6 +3,7 @@ package com.namung08.ch3codeyourself.web.controller;
 import com.namung08.ch3codeyourself.post.service.PostService;
 import com.namung08.ch3codeyourself.web.dto.post.PostCreateRequest;
 import com.namung08.ch3codeyourself.web.dto.post.PostResponse;
+import com.namung08.ch3codeyourself.web.dto.post.PostSearchRequest;
 import com.namung08.ch3codeyourself.web.dto.post.PostUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,8 @@ public class PostController {
   }
 
   @GetMapping
-  public ResponseEntity<List<PostResponse>> getPosts() {
-    return ResponseEntity.status(HttpStatus.OK).body(service.getPosts());
+  public ResponseEntity<List<PostResponse>> getPosts(@ModelAttribute PostSearchRequest searchRequest) {
+    return ResponseEntity.status(HttpStatus.OK).body(service.getPosts(searchRequest));
   }
 
   @GetMapping("/{id}")

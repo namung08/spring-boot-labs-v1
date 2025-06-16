@@ -4,6 +4,7 @@ import com.namung08.ch3codeyourself.post.mapper.PostMapper;
 import com.namung08.ch3codeyourself.post.model.Post;
 import com.namung08.ch3codeyourself.web.dto.post.PostCreateRequest;
 import com.namung08.ch3codeyourself.web.dto.post.PostResponse;
+import com.namung08.ch3codeyourself.web.dto.post.PostSearchRequest;
 import com.namung08.ch3codeyourself.web.dto.post.PostUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,8 @@ public class PostServiceImpl implements PostService {
   }
 
   @Override
-  public List<PostResponse> getPosts() {
-    return mapper.findAll().stream().map(PostResponse::from).toList();
+  public List<PostResponse> getPosts(PostSearchRequest req) {
+    return mapper.findAll(req).stream().map(PostResponse::from).toList();
   }
 
   @Override

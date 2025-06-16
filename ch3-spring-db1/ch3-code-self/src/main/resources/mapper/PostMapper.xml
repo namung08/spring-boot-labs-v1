@@ -9,9 +9,16 @@
         INSERT INTO posts(title, body)
         values (#{title}, #{body})
     </insert>
-    <select id="findAll" resultType="com.namung08.ch3codeyourself.post.model.Post">
+    <select id="findAll" resultType="com.namung08.ch3codeyourself.post.model.Post" parameterType="PostSearchRequest">
         select *
-        from posts;
+        from posts
+        <where>
+            <if test="req.keyword != null and req.keyword != ''">
+                (title like concat('%', #{req.keyword}, '%')
+                     or body like concat('%', #{req.keyword}, '%'))
+            </if>
+        </where>
+        LIMIT #{req.size} offset #{req.offset}
     </select>
     <select id="findById" parameterType="long" resultType="Post">
         select *
