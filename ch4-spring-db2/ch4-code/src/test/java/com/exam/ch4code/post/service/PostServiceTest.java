@@ -1,10 +1,11 @@
 package com.exam.ch4code.post.service;
 
-import com.exam.ch4code.post.model.Post;
-import com.exam.ch4code.post.repository.PostRepository;
-import com.exam.ch4code.web.dto.post.PostCreateRequest;
-import com.exam.ch4code.web.dto.post.PostResponse;
-import com.exam.ch4code.web.dto.post.PostUpdateRequest;
+import com.exam.ch4code.v1.post.model.Post;
+import com.exam.ch4code.v1.post.repository.PostRepository;
+import com.exam.ch4code.v1.post.service.PostServiceImpl;
+import com.exam.ch4code.v1.web.dto.post.PostCreateRequest;
+import com.exam.ch4code.v1.web.dto.post.PostResponse;
+import com.exam.ch4code.v1.web.dto.post.PostUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
