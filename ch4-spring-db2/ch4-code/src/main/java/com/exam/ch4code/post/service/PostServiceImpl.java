@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostServiceImpl implements PostService {
   private final PostRepository repository;
 
