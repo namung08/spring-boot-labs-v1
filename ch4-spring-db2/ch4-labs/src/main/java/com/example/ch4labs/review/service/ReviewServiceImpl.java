@@ -1,7 +1,7 @@
 package com.example.ch4labs.review.service;
 
-import com.example.ch4labs.infrastructure.exception.ReviewException;
-import com.example.ch4labs.infrastructure.exception.ReviewExceptionCode;
+import com.example.ch4labs.infrastructure.exception.review.ReviewException;
+import com.example.ch4labs.infrastructure.exception.review.ReviewExceptionCode;
 import com.example.ch4labs.review.model.Review;
 import com.example.ch4labs.review.repository.ReviewRepository;
 import com.example.ch4labs.web.dto.review.request.ReviewCreateRequest;
