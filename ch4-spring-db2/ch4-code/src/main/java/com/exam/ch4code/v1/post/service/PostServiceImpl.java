@@ -1,10 +1,10 @@
-package com.exam.ch4code.post.service;
+package com.exam.ch4code.v1.post.service;
 
-import com.exam.ch4code.infrastructur.exception.PostException;
-import com.exam.ch4code.infrastructur.exception.PostExceptionCode;
-import com.exam.ch4code.post.model.Post;
-import com.exam.ch4code.post.repository.PostRepository;
-import com.exam.ch4code.web.dto.post.*;
+import com.exam.ch4code.v1.infrastructur.exception.PostException;
+import com.exam.ch4code.v1.infrastructur.exception.PostExceptionCode;
+import com.exam.ch4code.v1.post.model.Post;
+import com.exam.ch4code.v1.post.repository.PostRepository;
+import com.exam.ch4code.v1.web.dto.post.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@Service
 @RequiredArgsConstructor
 @Transactional
 public class PostServiceImpl implements PostService {

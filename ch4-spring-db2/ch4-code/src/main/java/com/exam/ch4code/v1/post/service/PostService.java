@@ -1,6 +1,6 @@
-package com.exam.ch4code.post.service;
+package com.exam.ch4code.v1.post.service;
 
-import com.exam.ch4code.web.dto.post.*;
+import com.exam.ch4code.v1.web.dto.post.*;
 
 public interface PostService {
   PostResponse createPost(PostCreateRequest req);

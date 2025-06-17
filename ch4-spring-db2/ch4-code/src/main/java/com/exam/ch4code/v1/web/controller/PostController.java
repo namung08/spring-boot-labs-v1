@@ -1,14 +1,13 @@
-package com.exam.ch4code.web.controller;
+package com.exam.ch4code.v1.web.controller;
 
-import com.exam.ch4code.post.service.PostService;
-import com.exam.ch4code.web.dto.common.CommonResponse;
-import com.exam.ch4code.web.dto.post.*;
+import com.exam.ch4code.v1.post.service.PostService;
+import com.exam.ch4code.v1.web.dto.common.CommonResponse;
+import com.exam.ch4code.v1.web.dto.post.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/posts")
 public class PostController {

@@ -1,6 +1,6 @@
-package com.exam.ch4code.post.repository;
+package com.exam.ch4code.v1.post.repository;
 
-import com.exam.ch4code.post.model.Post;
+import com.exam.ch4code.v1.post.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

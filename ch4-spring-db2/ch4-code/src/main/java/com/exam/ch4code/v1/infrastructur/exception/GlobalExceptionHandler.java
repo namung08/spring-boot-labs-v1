@@ -1,7 +1,6 @@
-package com.exam.ch4code.infrastructur.exception;
+package com.exam.ch4code.v1.infrastructur.exception;
 
-import com.exam.ch4code.web.dto.common.CommonResponse;
-import lombok.RequiredArgsConstructor;
+import com.exam.ch4code.v1.web.dto.common.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.Map;
 
 @Slf4j
-@RestControllerAdvice
+//@RestControllerAdvice
 public class GlobalExceptionHandler {
   @ExceptionHandler(PostException.class)
   public ResponseEntity<CommonResponse<Map<String, String>>> handlePostException(PostException ex) {

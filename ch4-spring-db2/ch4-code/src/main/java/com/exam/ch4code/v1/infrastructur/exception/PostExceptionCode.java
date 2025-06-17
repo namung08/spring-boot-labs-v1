@@ -1,4 +1,4 @@
-package com.exam.ch4code.infrastructur.exception;
+package com.exam.ch4code.v1.infrastructur.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

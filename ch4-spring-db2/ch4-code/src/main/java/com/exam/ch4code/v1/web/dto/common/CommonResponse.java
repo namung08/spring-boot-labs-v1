@@ -1,4 +1,4 @@
-package com.exam.ch4code.web.dto.common;
+package com.exam.ch4code.v1.web.dto.common;
 
 public record CommonResponse<T>(
     Boolean success,

@@ -1,4 +1,4 @@
-package com.exam.ch4code.web.dto.post;
+package com.exam.ch4code.v1.web.dto.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

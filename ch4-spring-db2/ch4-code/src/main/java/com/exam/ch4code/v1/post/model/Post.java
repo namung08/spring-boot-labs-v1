@@ -1,10 +1,10 @@
-package com.exam.ch4code.post.model;
+package com.exam.ch4code.v1.post.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "posts")
+//@Entity
+//@Table(name = "posts")
 @Getter
 @Setter
 @AllArgsConstructor
