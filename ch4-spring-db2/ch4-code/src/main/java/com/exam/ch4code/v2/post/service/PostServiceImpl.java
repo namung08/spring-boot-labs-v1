@@ -30,9 +30,8 @@ public class PostServiceImpl implements PostService {
   @Transactional(readOnly = true)
   public PostPageResponse getPosts(PostSearchRequest req) {
     Pageable page = PageRequest.of(req.getPage()-1, req.getSize());
-    Page<Post> posts = repository.findByTitleContainsOrBodyContains(req.getKeyword(), page);
     Page<Post> post = repository.findByTitleContainsOrBodyContainsAllIgnoreCase(req.getKeyword(), req.getKeyword(), page);
-    log.info(posts.toString());
+    log.info(post.toString());
     return PostPageResponse.builder()
                            .page(req.getPage())
                            .size(req.getSize())
