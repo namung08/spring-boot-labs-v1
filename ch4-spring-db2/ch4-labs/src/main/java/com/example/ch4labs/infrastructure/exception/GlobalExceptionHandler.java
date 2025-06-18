@@ -1,7 +1,6 @@
 package com.example.ch4labs.infrastructure.exception;
 
 import com.example.ch4labs.infrastructure.exception.review.ReviewException;
-import com.example.ch4labs.infrastructure.exception.todo.TodoException;
 import com.example.ch4labs.web.dto.exception.response.ExceptionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,4 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(ex.getStatus()).body(ExceptionResponse.toResponse(ex.getCode(), ex.getMessage()));
   }
 
-  @ExceptionHandler(TodoException.class)
-  public ResponseEntity<ExceptionResponse> handleException(TodoException ex) {
-    log.error(ex.getMessage(), ex);
-    return ResponseEntity.status(ex.getStatus()).body(ExceptionResponse.toResponse(ex.getCode(), ex.getMessage()));
-  }
 }
