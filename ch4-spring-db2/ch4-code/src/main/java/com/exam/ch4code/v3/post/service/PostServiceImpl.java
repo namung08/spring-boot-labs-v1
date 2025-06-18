@@ -33,13 +33,14 @@ public class PostServiceImpl implements PostService {
     Page<Post> posts;
     // 우선순위 정리해서 명확하게 처리
     if (req.getKeyword() != null && req.getAuthor() != null) {
-      posts = repository.findByTitleContainsAndAuthor(req.getKeyword(), req.getAuthor(), page);
+      posts = repository.searchByAuthorAndTitleContains(req.getAuthor(), req.getKeyword(), page);
     } else if (req.getKeyword() != null) {
       posts = repository.findByTitleContains(req.getKeyword(), page);
     } else if (req.getAuthor() != null) {
       posts = repository.findByAuthor(req.getAuthor(), page);
     } else if (req.getCreateAt() != null) {
-      posts = repository.findByCreatedAfter(req.getCreateAt(), page);
+//      posts = repository.findByCreatedAfter(req.getCreateAt(), page);
+      posts = repository.searchByCreatedAfter(req.getCreateAt(), page);
     } else {
       posts = repository.findAll(page);
     }
