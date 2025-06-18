@@ -8,8 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
-
+public interface PostRepository extends JpaRepository<Post, Long>, PostQueryRepository{
   Page<Post> findByTitleContainsOrBodyContainsAllIgnoreCase(String title, String body, Pageable pageable);
 
   Page<Post> findByAuthor(String author, Pageable pageable);

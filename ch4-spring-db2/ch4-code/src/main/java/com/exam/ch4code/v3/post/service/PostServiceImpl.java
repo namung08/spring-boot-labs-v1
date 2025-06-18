@@ -3,6 +3,7 @@ package com.exam.ch4code.v3.post.service;
 import com.exam.ch4code.v3.infrastructure.exception.PostException;
 import com.exam.ch4code.v3.infrastructure.exception.PostExceptionCode;
 import com.exam.ch4code.v3.post.model.Post;
+import com.exam.ch4code.v3.post.repository.PostQueryRepository;
 import com.exam.ch4code.v3.post.repository.PostRepository;
 import com.exam.ch4code.v3.web.dto.post.*;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,8 @@ public class PostServiceImpl implements PostService {
       posts = repository.findByAuthor(req.getAuthor(), page);
     } else if (req.getCreateAt() != null) {
 //      posts = repository.findByCreatedAfter(req.getCreateAt(), page);
-      posts = repository.searchByCreatedAfter(req.getCreateAt(), page);
+//      posts = repository.searchByCreatedAfter(req.getCreateAt(), page);
+      posts = repository.searchByCreatedAtWithQueryDSL(req.getCreateAt(), page);
     } else {
       posts = repository.findAll(page);
     }
