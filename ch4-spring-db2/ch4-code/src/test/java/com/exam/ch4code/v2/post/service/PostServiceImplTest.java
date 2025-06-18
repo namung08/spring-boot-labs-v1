@@ -42,4 +42,24 @@ class PostServiceImplTest {
     assertThat(found.getBody()).isEqualTo(req.body());
   }
 
+  @Test
+  void 게시글_검색_페이징() {
+    // given
+    for (int i = 1; i <= 20; i++) {
+      repository.save(new Post(null, "post " + i, "post body " + i));
+    }
+
+    PostSearchRequest searchRequest = new PostSearchRequest(0, 10, "post");
+
+    // when
+    PostPageResponse res = service.getPosts(searchRequest);
+
+    // then
+    assertThat(res.getPage()).isEqualTo(0);
+    assertThat(res.getSize()).isEqualTo(10);
+    assertThat(res.getTotalCount()).isEqualTo(20);
+    assertThat(res.getTotalPage()).isEqualTo(2);
+    assertThat(res.getPosts()).hasSize(10);
+
+  }
 }
