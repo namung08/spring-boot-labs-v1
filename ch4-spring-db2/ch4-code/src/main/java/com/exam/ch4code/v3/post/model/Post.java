@@ -28,9 +28,7 @@ public class Post {
 
   private String author;
 
+  @Column(name = "created_at")
   @CreationTimestamp
   private LocalDateTime created;
-
-  @UpdateTimestamp
-  private LocalDateTime updated;
 }
