@@ -13,8 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 // 단위 테스트 vs 통합 테스트 => 통합 테스트
 // 서비스 + 레포
