@@ -30,14 +30,26 @@ public class PostServiceImpl implements PostService {
   @Transactional(readOnly = true)
   public PostPageResponse getPosts(PostSearchRequest req) {
     Pageable page = PageRequest.of(req.getPage(), req.getSize());
-    Page<Post> post = repository.findByTitleContainsOrBodyContainsAllIgnoreCase(req.getKeyword(), req.getKeyword(), page);
-    log.info(post.toString());
+    Page<Post> posts;
+    // 우선순위 정리해서 명확하게 처리
+    if (req.getKeyword() != null && req.getAuthor() != null) {
+      posts = repository.findByTitleContainsAndAuthor(req.getKeyword(), req.getAuthor(), page);
+    } else if (req.getKeyword() != null) {
+      posts = repository.findByTitleContains(req.getKeyword(), page);
+    } else if (req.getAuthor() != null) {
+      posts = repository.findByAuthor(req.getAuthor(), page);
+    } else if (req.getCreateAt() != null) {
+      posts = repository.findByCreatedAfter(req.getCreateAt(), page);
+    } else {
+      posts = repository.findAll(page);
+    }
+
     return PostPageResponse.builder()
-                           .page(req.getPage())
-                           .size(req.getSize())
-                           .totalCount(post.getTotalElements())
-                           .totalPage(post.getTotalPages())
-                           .posts(post.stream().map(PostResponse::from).toList())
+                           .page(posts.getNumber())
+                           .size(posts.getSize())
+                           .totalCount(posts.getTotalElements())
+                           .totalPage(posts.getTotalPages())
+                           .posts(posts.stream().map(PostResponse::from).toList())
                            .build();
   }
 
