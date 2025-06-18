@@ -16,7 +16,7 @@ spring:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
         dialect: org.hibernate.dialect.PostgreSQLDialect
   profiles:
-    active: v2
+    active: v3
 
 server:
   port: 8080
