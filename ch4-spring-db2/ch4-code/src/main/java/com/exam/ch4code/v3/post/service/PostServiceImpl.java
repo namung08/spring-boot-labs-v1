@@ -1,7 +1,7 @@
 package com.exam.ch4code.v3.post.service;
 
-import com.exam.ch4code.v3.exception.PostException;
-import com.exam.ch4code.v3.exception.PostExceptionCode;
+import com.exam.ch4code.v3.infrastructure.exception.PostException;
+import com.exam.ch4code.v3.infrastructure.exception.PostExceptionCode;
 import com.exam.ch4code.v3.post.model.Post;
 import com.exam.ch4code.v3.post.repository.PostRepository;
 import com.exam.ch4code.v3.web.dto.post.*;

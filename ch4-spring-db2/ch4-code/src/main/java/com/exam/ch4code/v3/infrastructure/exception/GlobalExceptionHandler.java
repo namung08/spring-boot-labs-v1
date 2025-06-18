@@ -1,4 +1,4 @@
-package com.exam.ch4code.v3.exception;
+package com.exam.ch4code.v3.infrastructure.exception;
 
 import com.exam.ch4code.v3.web.dto.common.CommonResponse;
 import lombok.extern.slf4j.Slf4j;
