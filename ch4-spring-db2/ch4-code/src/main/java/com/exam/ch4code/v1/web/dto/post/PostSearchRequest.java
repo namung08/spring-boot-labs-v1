@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class PostSearchRequest {
   private Integer page = 1;
   private Integer size = 10;
-  private String keyword = "";
 }

@@ -29,15 +29,16 @@ public class PostServiceImpl implements PostService {
   @Transactional(readOnly = true)
   public PostPageResponse getPosts(PostSearchRequest req) {
     Pageable page = PageRequest.of(req.getPage()-1, req.getSize());
-    Page<Post> posts = repository.findByTitleContainsOrBodyContains(req.getKeyword(), page);
-    log.info(posts.toString());
-    return PostPageResponse.builder()
-                           .page(req.getPage())
-                           .size(req.getSize())
-                           .totalCount(posts.getTotalElements())
-                           .totalPage(posts.getTotalPages())
-                           .posts(posts.stream().map(PostResponse::from).toList())
-                           .build();
+//    Page<Post> posts = repository.findByTitleContainsOrBodyContains(req.getKeyword(), page);
+//    log.info(posts.toString());
+//    return PostPageResponse.builder()
+//                           .page(req.getPage())
+//                           .size(req.getSize())
+//                           .totalCount(posts.getTotalElements())
+//                           .totalPage(posts.getTotalPages())
+//                           .posts(posts.stream().map(PostResponse::from).toList())
+//                           .build();
+    return null;
   }
 
   @Override
