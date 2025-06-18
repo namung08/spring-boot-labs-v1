@@ -5,13 +5,15 @@ import com.example.ch4labs.infrastructure.exception.review.ReviewExceptionCode;
 import com.example.ch4labs.review.model.Review;
 import com.example.ch4labs.review.repository.ReviewRepository;
 import com.example.ch4labs.web.dto.review.request.ReviewCreateRequest;
+import com.example.ch4labs.web.dto.review.request.ReviewSearchRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewUpdateRequest;
 import com.example.ch4labs.web.dto.review.response.ReviewResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +26,25 @@ public class ReviewServiceImpl implements ReviewService {
   }
 
   @Override
-  public List<ReviewResponse> geReviews() {
-    return repository.findAll().stream().map(ReviewResponse::from).toList();
+  public Page<ReviewResponse> geReviews(ReviewSearchRequest req) {
+    Pageable pageable = PageRequest.of(req.getPage(), req.getSize());
+    Page<Review> reviews = repository.findAll(pageable);
+    if(req.getBookTitle() != null && !req.getBookTitle().isBlank()) {
+      reviews.filter(review -> review.getBookTitle().contains(req.getBookTitle()));
+    }
+    if (req.getAuthor() != null && !req.getAuthor().isBlank()) {
+      reviews.filter(review -> review.getAuthor().equals(req.getAuthor()));
+    }
+    if(req.getRating() != null) {
+      reviews.filter(review -> review.getRating().equals(req.getRating()));
+    }
+    if(req.getMinRating() != null) {
+      reviews.filter(review -> review.getRating() >= req.getMinRating());
+    }
+    if(req.getMaxRating() != null) {
+      reviews.filter(review -> review.getRating() <= req.getMaxRating());
+    }
+    return reviews.map(ReviewResponse::from);
   }
 
   @Override
