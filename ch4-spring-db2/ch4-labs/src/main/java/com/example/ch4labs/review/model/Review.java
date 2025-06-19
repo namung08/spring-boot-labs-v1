@@ -2,6 +2,9 @@ package com.example.ch4labs.review.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "reviews")
@@ -21,4 +24,7 @@ public class Review {
   private String bookTitle;
   private String bookAuthor;
   private Integer rating;
+
+  @CreationTimestamp
+  private LocalDateTime createdAt;
 }

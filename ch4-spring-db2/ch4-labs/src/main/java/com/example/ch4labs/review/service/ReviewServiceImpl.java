@@ -12,11 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.example.ch4labs.review.specification.ReviewSpecification.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,27 +27,9 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Override
   public Page<ReviewResponse> geReviews(ReviewSearchRequest req) {
-    Specification<Review> spec = (root, query, cb) -> cb.conjunction();
-    Pageable pageable = PageRequest.of(req.getPage(), req.getSize());
-    Page<Review> reviews;
-    if(req.getBookTitle() != null) {
-      spec = spec.and(byBookTitleContains(req.getBookTitle()));
-    }
-    if (req.getAuthor() != null) {
-      spec = spec.and(byAuthor(req.getAuthor()));
-    }
-    if(req.getRating() != null) {
-      spec = spec.and(byRating(req.getRating()));
-    }
-    if(req.getMinRating() != null) {
-      spec = spec.and(byGreaterMinRating(req.getMinRating()));
-    }
-    if(req.getMaxRating() != null) {
-      spec = spec.and(byLessMaxRating(req.getMaxRating()));
-    }
-    reviews = repository.findAll(spec, pageable);
+    Page<ReviewResponse> reviews = repository.searchReview(req);
 
-    return reviews.map(ReviewResponse::from);
+    return reviews;
   }
 
   @Override
