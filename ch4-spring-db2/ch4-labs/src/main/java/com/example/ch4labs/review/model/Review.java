@@ -30,6 +30,6 @@ public class Review {
   @CreationTimestamp
   private LocalDateTime createdAt;
 
-  @OneToMany(mappedBy = "review", orphanRemoval = true )
+  @OneToMany(mappedBy = "review", orphanRemoval = true, fetch = FetchType.LAZY)
   private List<Comment> comment;
 }

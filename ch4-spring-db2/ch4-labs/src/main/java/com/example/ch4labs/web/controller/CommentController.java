@@ -2,15 +2,13 @@ package com.example.ch4labs.web.controller;
 
 import com.example.ch4labs.comment.sevice.CommentService;
 import com.example.ch4labs.web.dto.comment.request.CommentCreateRequest;
+import com.example.ch4labs.web.dto.comment.request.CommentUpdateRequest;
 import com.example.ch4labs.web.dto.comment.response.CommentPageResponse;
 import com.example.ch4labs.web.dto.comment.response.CommentResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/review/{reviewId}/comments")
@@ -25,6 +23,17 @@ public class CommentController {
 
   @GetMapping
   public ResponseEntity<CommentPageResponse> getAllComments(@PathVariable Long reviewId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-    return ResponseEntity.status(HttpStatus.OK).body(service.getCommends(reviewId, page, size));
+    return ResponseEntity.status(HttpStatus.OK).body(service.getComments(reviewId, page, size));
+  }
+
+  @PutMapping("/{commentId}")
+  public ResponseEntity<CommentResponse> updateComment(@PathVariable Long reviewId, @PathVariable Long commentId, @RequestBody CommentUpdateRequest req) {
+    return ResponseEntity.status(HttpStatus.OK).body(service.updateComment(reviewId, commentId, req));
+  }
+
+  @DeleteMapping("/{commentId}")
+  public ResponseEntity<CommentResponse> deleteComment(@PathVariable Long reviewId, @PathVariable Long commentId) {
+    service.deleteComment(reviewId, commentId);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }

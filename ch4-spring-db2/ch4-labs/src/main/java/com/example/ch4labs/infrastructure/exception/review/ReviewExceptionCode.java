@@ -12,7 +12,13 @@ public enum ReviewExceptionCode {
                         "server error"),
   REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND,
                    "REVIEW_001",
-                   "No review information found" );
+                   "No review information found" ),
+  COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,
+                    "REVIEW_002" ,
+                    "No comment information found" ),
+  NOT_MATCH_COMMENT(HttpStatus.BAD_REQUEST,
+      "REVIEW_003"
+      , "Not match comment");
 
   private final HttpStatus status;
   private final String code;
