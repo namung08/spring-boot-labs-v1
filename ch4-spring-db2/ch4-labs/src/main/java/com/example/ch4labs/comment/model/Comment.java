@@ -27,5 +27,6 @@ public class Comment {
   private LocalDateTime createdAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "review_id")
   private Review review;
 }

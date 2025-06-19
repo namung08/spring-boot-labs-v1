@@ -1,10 +1,12 @@
 package com.example.ch4labs.review.model;
 
+import com.example.ch4labs.comment.model.Comment;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "reviews")
@@ -27,4 +29,7 @@ public class Review {
 
   @CreationTimestamp
   private LocalDateTime createdAt;
+
+  @OneToMany(mappedBy = "review", orphanRemoval = true )
+  private List<Comment> comment;
 }
