@@ -8,6 +8,7 @@ import com.example.ch4labs.web.dto.review.request.ReviewCreateRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewSearchRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewUpdateRequest;
 import com.example.ch4labs.web.dto.review.response.ReviewResponse;
+import com.example.ch4labs.web.dto.review.response.ReviewWithCommentsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,5 +50,10 @@ public class ReviewServiceImpl implements ReviewService {
   @Override
   public Review getReview(Long id) {
     return repository.findById(id).orElseThrow(() -> new ReviewException(ReviewExceptionCode.REVIEW_NOT_FOUND));
+  }
+
+  @Override
+  public ReviewWithCommentsResponse getReviewWithComments(Long id) {
+    return ReviewWithCommentsResponse.from(repository.findById(id).orElseThrow(() -> new ReviewException(ReviewExceptionCode.REVIEW_NOT_FOUND)));
   }
 }

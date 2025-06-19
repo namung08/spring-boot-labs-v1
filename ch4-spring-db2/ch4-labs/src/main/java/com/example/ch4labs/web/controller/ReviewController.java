@@ -5,6 +5,7 @@ import com.example.ch4labs.web.dto.review.request.ReviewCreateRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewSearchRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewUpdateRequest;
 import com.example.ch4labs.web.dto.review.response.ReviewResponse;
+import com.example.ch4labs.web.dto.review.response.ReviewWithCommentsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -36,5 +37,10 @@ public class ReviewController {
   public ResponseEntity<ReviewResponse> deleteReview(@PathVariable Long id) {
     service.deleteReview(id);
     return ResponseEntity.noContent().build();
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<ReviewWithCommentsResponse> getReview(@PathVariable Long id) {
+    return ResponseEntity.status(HttpStatus.OK).body(service.getReviewWithComments(id));
   }
 }

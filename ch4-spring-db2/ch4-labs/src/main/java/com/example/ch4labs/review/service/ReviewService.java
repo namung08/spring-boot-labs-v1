@@ -5,6 +5,7 @@ import com.example.ch4labs.web.dto.review.request.ReviewCreateRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewSearchRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewUpdateRequest;
 import com.example.ch4labs.web.dto.review.response.ReviewResponse;
+import com.example.ch4labs.web.dto.review.response.ReviewWithCommentsResponse;
 import org.springframework.data.domain.Page;
 
 public interface ReviewService {
@@ -13,4 +14,5 @@ public interface ReviewService {
   ReviewResponse updateReview(Long id, ReviewUpdateRequest req);
   void deleteReview(Long id);
   Review getReview(Long id);
+  ReviewWithCommentsResponse getReviewWithComments(Long id);
 }
