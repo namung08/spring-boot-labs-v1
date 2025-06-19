@@ -10,7 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class CommentCreateRequest implements Request<Comment> {
-  private Long reviewId;
   private String content;
   private String author;
   @Override
