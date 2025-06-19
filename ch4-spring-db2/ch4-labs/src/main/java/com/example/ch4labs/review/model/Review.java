@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -31,5 +32,5 @@ public class Review {
   private LocalDateTime createdAt;
 
   @OneToMany(mappedBy = "review", orphanRemoval = true, fetch = FetchType.LAZY)
-  private List<Comment> comment;
+  private List<Comment> comment = new LinkedList<>();
 }
