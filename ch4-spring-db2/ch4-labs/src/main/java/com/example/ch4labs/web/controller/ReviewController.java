@@ -24,7 +24,7 @@ public class ReviewController {
 
   @GetMapping
   public ResponseEntity<Page<ReviewResponse>> getReviews(ReviewSearchRequest req) {
-    return ResponseEntity.status(HttpStatus.OK).body(service.geReviews(req));
+    return ResponseEntity.status(HttpStatus.OK).body(service.getReviews(req));
   }
 
   @PutMapping("/{id}")

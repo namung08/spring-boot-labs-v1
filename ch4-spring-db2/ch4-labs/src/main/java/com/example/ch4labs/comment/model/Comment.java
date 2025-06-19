@@ -23,6 +23,7 @@ public class Comment {
   @Column(nullable = false)
   private String author;
   @CreationTimestamp
+  @Column(nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
   @ManyToOne(fetch = FetchType.LAZY)

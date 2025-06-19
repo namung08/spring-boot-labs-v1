@@ -26,7 +26,7 @@ public class ReviewServiceImpl implements ReviewService {
   }
 
   @Override
-  public Page<ReviewResponse> geReviews(ReviewSearchRequest req) {
+  public Page<ReviewResponse> getReviews(ReviewSearchRequest req) {
     Page<ReviewResponse> reviews = repository.searchReview(req);
 
     return reviews;
@@ -44,5 +44,10 @@ public class ReviewServiceImpl implements ReviewService {
   public void deleteReview(Long id) {
     Review review = repository.findById(id).orElseThrow(() -> new ReviewException(ReviewExceptionCode.REVIEW_NOT_FOUND));
     repository.delete(review);
+  }
+
+  @Override
+  public Review getReview(Long id) {
+    return repository.findById(id).orElseThrow(() -> new ReviewException(ReviewExceptionCode.REVIEW_NOT_FOUND));
   }
 }
