@@ -4,6 +4,7 @@ import com.example.ch4labs.review.model.Review;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +26,9 @@ public class Comment {
   @CreationTimestamp
   @Column(nullable = false, updatable = false)
   private LocalDateTime createdAt;
+  @UpdateTimestamp
+  @Column(nullable = false)
+  private LocalDateTime updatedAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   private Review review;

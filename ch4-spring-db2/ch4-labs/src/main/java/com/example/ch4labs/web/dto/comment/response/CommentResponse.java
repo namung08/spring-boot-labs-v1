@@ -15,16 +15,18 @@ public class CommentResponse {
   private String content;
   private String author;
   private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
   private Long reviewId;
 
   public static CommentResponse from(Comment domain) {
     return CommentResponse.builder()
-                              .id(domain.getId())
-                              .content(domain.getContent())
-                              .author(domain.getAuthor())
-                              .createdAt(domain.getCreatedAt())
-                              .reviewId(domain.getReview()
-                                              .getId())
-                              .build();
+                          .id(domain.getId())
+                          .content(domain.getContent())
+                          .author(domain.getAuthor())
+                          .createdAt(domain.getCreatedAt())
+                          .updatedAt(domain.getUpdatedAt())
+                          .reviewId(domain.getReview()
+                                          .getId())
+                          .build();
   }
 }

@@ -2,6 +2,7 @@ package com.example.ch4labs.web.controller;
 
 import com.example.ch4labs.comment.sevice.CommentService;
 import com.example.ch4labs.web.dto.comment.request.CommentCreateRequest;
+import com.example.ch4labs.web.dto.comment.request.CommentSearchRequest;
 import com.example.ch4labs.web.dto.comment.request.CommentUpdateRequest;
 import com.example.ch4labs.web.dto.comment.response.CommentPageResponse;
 import com.example.ch4labs.web.dto.comment.response.CommentResponse;
@@ -22,8 +23,8 @@ public class CommentController {
   }
 
   @GetMapping
-  public ResponseEntity<CommentPageResponse> getAllComments(@PathVariable Long reviewId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-    return ResponseEntity.status(HttpStatus.OK).body(service.getComments(reviewId, page, size));
+  public ResponseEntity<CommentPageResponse> getAllComments(@PathVariable Long reviewId, CommentSearchRequest req) {
+    return ResponseEntity.status(HttpStatus.OK).body(service.getComments(reviewId, req));
   }
 
   @PutMapping("/{commentId}")
