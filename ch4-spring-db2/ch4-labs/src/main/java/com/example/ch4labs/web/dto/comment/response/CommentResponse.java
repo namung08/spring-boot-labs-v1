@@ -31,7 +31,8 @@ public class CommentResponse {
                           .updatedAt(domain.getUpdatedAt())
                           .reviewId(domain.getReview()
                                           .getId())
-                          .parentId(domain.getParent().getId() != null ? domain.getParent().getId() : null)
+                          .parentId(domain.getParent() != null ? domain.getParent().getId() : null)
+                          .replies(domain.getChildren() != null ? domain.getChildren().stream().map(CommentResponse::from).toList() : null)
                           .build();
   }
 

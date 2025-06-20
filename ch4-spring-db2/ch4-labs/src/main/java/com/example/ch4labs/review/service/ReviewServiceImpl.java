@@ -62,7 +62,8 @@ public class ReviewServiceImpl implements ReviewService {
                               .orElseThrow(() -> new ReviewException(ReviewExceptionCode.REVIEW_NOT_FOUND));
     if(req.isIncludeComments()) {
       Pageable pageable = PageRequest.of(req.getPage(), req.getSize());
-      Page<Comment> comments = commentRepository.findByReview_Id(id, pageable);
+      Page<Comment> comments = commentRepository.findByReview_IdAndParentNull(id, pageable);
+      
       return ReviewWithCommentsResponse.from(review, comments);
     }
 

@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
   Page<Comment> findByReview_Id(Long id, Pageable pageable);
+
+  Page<Comment> findByReview_IdAndParentNull(Long id, Pageable pageable);
 }
