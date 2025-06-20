@@ -2,6 +2,7 @@ package com.example.ch4labs.web.controller;
 
 import com.example.ch4labs.review.service.ReviewService;
 import com.example.ch4labs.web.dto.review.request.ReviewCreateRequest;
+import com.example.ch4labs.web.dto.review.request.ReviewDetailRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewSearchRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewUpdateRequest;
 import com.example.ch4labs.web.dto.review.response.ReviewResponse;
@@ -40,7 +41,7 @@ public class ReviewController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ReviewWithCommentsResponse> getReview(@PathVariable Long id) {
-    return ResponseEntity.status(HttpStatus.OK).body(service.getReviewWithComments(id));
+  public ResponseEntity<ReviewWithCommentsResponse> getReview(@PathVariable Long id, ReviewDetailRequest req) {
+    return ResponseEntity.status(HttpStatus.OK).body(service.getReviewWithComments(id, req));
   }
 }

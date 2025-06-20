@@ -1,10 +1,13 @@
 package com.example.ch4labs.review.service;
 
+import com.example.ch4labs.comment.model.Comment;
+import com.example.ch4labs.comment.repository.CommentRepository;
 import com.example.ch4labs.infrastructure.exception.review.ReviewException;
 import com.example.ch4labs.infrastructure.exception.review.ReviewExceptionCode;
 import com.example.ch4labs.review.model.Review;
 import com.example.ch4labs.review.repository.ReviewRepository;
 import com.example.ch4labs.web.dto.review.request.ReviewCreateRequest;
+import com.example.ch4labs.web.dto.review.request.ReviewDetailRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewSearchRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewUpdateRequest;
 import com.example.ch4labs.web.dto.review.response.ReviewResponse;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
   private final ReviewRepository repository;
+  private final CommentRepository commentRepository;
 
   @Override
   public ReviewResponse createReview(ReviewCreateRequest req) {
@@ -53,7 +57,15 @@ public class ReviewServiceImpl implements ReviewService {
   }
 
   @Override
-  public ReviewWithCommentsResponse getReviewWithComments(Long id) {
-    return ReviewWithCommentsResponse.from(repository.findById(id).orElseThrow(() -> new ReviewException(ReviewExceptionCode.REVIEW_NOT_FOUND)));
+  public ReviewWithCommentsResponse getReviewWithComments(Long id, ReviewDetailRequest req) {
+    Review review = repository.findById(id)
+                              .orElseThrow(() -> new ReviewException(ReviewExceptionCode.REVIEW_NOT_FOUND));
+    if(req.isIncludeComments()) {
+      Pageable pageable = PageRequest.of(req.getPage(), req.getSize());
+      Page<Comment> comments = commentRepository.findByReview_Id(id, pageable);
+      return ReviewWithCommentsResponse.from(review, comments);
+    }
+
+    return ReviewWithCommentsResponse.from(review);
   }
 }

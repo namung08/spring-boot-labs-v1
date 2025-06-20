@@ -19,6 +19,9 @@ public class CommentPageResponse{
   private List<CommentResponse> comments;
 
   public static CommentPageResponse from(Page<CommentResponse> page){
+    if(page == null) {
+      return null;
+    }
     return CommentPageResponse.builder()
                               .page(page.getNumber())
                               .size(page.getSize())

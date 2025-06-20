@@ -2,6 +2,7 @@ package com.example.ch4labs.review.service;
 
 import com.example.ch4labs.review.model.Review;
 import com.example.ch4labs.web.dto.review.request.ReviewCreateRequest;
+import com.example.ch4labs.web.dto.review.request.ReviewDetailRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewSearchRequest;
 import com.example.ch4labs.web.dto.review.request.ReviewUpdateRequest;
 import com.example.ch4labs.web.dto.review.response.ReviewResponse;
@@ -14,5 +15,5 @@ public interface ReviewService {
   ReviewResponse updateReview(Long id, ReviewUpdateRequest req);
   void deleteReview(Long id);
   Review getReview(Long id);
-  ReviewWithCommentsResponse getReviewWithComments(Long id);
+  ReviewWithCommentsResponse getReviewWithComments(Long id, ReviewDetailRequest req);
 }

@@ -1,11 +1,12 @@
 package com.example.ch4labs.web.dto.review.response;
 
+import com.example.ch4labs.comment.model.Comment;
 import com.example.ch4labs.review.model.Review;
+import com.example.ch4labs.web.dto.comment.response.CommentPageResponse;
 import com.example.ch4labs.web.dto.comment.response.CommentResponse;
 import lombok.*;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -14,12 +15,19 @@ import java.util.stream.Collectors;
 @Builder
 public class ReviewWithCommentsResponse {
   private ReviewResponse reviewResponse;
-  private List<CommentResponse> comments;
+  private CommentPageResponse comments;
+
+  public static ReviewWithCommentsResponse from(Review review, Page<Comment> comments) {
+    return ReviewWithCommentsResponse.builder()
+        .reviewResponse(ReviewResponse.from(review))
+        .comments(CommentPageResponse.from(comments.map(CommentResponse::from)))
+        .build();
+  }
 
   public static ReviewWithCommentsResponse from(Review review) {
     return ReviewWithCommentsResponse.builder()
         .reviewResponse(ReviewResponse.from(review))
-        .comments(review.getComment().stream().map(CommentResponse::from).toList())
+        .comments(CommentPageResponse.from(null))
         .build();
   }
 }
