@@ -8,7 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class CommentSearchRequest {
+  @Builder.Default
   private int page = 0;
+  @Builder.Default
   private int size = 10;
-  private String sort;
+  @Builder.Default
+  private String sort = "createdAt,desc";
 }

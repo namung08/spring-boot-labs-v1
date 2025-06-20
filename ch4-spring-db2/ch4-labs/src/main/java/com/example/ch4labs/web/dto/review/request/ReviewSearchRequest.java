@@ -6,6 +6,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ReviewSearchRequest {
   private String author;
   private String bookTitle;
@@ -16,7 +17,10 @@ public class ReviewSearchRequest {
   private Integer rating;
   private Integer minRating;
   private Integer maxRating;
+  @Builder.Default
   private String sort = "createdAt,desc";
+  @Builder.Default
   private Integer page = 0;
+  @Builder.Default
   private Integer size = 10;
 }
