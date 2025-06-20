@@ -33,6 +33,14 @@ public class CommentServiceImpl implements CommentService {
     Comment comment = req.toDomain();
     comment.setReview(reviewRepository.findById(postId).orElseThrow(() -> new ReviewException(
         ReviewExceptionCode.REVIEW_NOT_FOUND)));
+
+    if(req.getParentId() != null) {
+      Comment parent = repository.findById(req.getParentId())
+                                 .orElseThrow(
+                                     () -> new ReviewException(ReviewExceptionCode.COMMENT_NOT_FOUND)
+                                 );
+      comment.setParent(parent);
+    }
     return CommentResponse.from(repository.save(comment));
   }
 

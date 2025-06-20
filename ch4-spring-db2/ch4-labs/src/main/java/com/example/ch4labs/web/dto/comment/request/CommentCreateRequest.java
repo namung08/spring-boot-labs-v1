@@ -12,6 +12,7 @@ import lombok.*;
 public class CommentCreateRequest implements Request<Comment> {
   private String content;
   private String author;
+  private Long parentId;
   @Override
   public Comment toDomain() {
     return Comment.builder()

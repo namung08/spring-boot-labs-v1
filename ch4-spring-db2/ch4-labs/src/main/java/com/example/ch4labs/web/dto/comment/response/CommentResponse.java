@@ -4,6 +4,8 @@ import com.example.ch4labs.comment.model.Comment;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,6 +19,8 @@ public class CommentResponse {
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
   private Long reviewId;
+  private Long parentId;
+  private List<CommentResponse> replies = new LinkedList<>();
 
   public static CommentResponse from(Comment domain) {
     return CommentResponse.builder()
@@ -27,6 +31,8 @@ public class CommentResponse {
                           .updatedAt(domain.getUpdatedAt())
                           .reviewId(domain.getReview()
                                           .getId())
+                          .parentId(domain.getParent().getId() != null ? domain.getParent().getId() : null)
                           .build();
   }
+
 }

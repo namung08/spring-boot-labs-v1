@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,6 +31,14 @@ public class Comment {
   @UpdateTimestamp
   @Column(nullable = false)
   private LocalDateTime updatedAt;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  // parent_id 로 지정을 하겠다
+  @JoinColumn(name = "parent_id")
+  private Comment parent;
+
+  @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Comment> children = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY)
   private Review review;
