@@ -33,7 +33,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpSession session) {
-        // TODO
-        return null;
+        authService.logout(session);
+        return ResponseEntity.ok().build();
     }
 }

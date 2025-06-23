@@ -39,7 +39,10 @@ public class AuthService {
     }
 
     public void logout(HttpSession session) {
-        // TODO
+        // 세션에서 사용자 정보 지우기
+        session.removeAttribute(USER_SESSION_KEY);
+        // 세션 무효화 시키기
+        session.invalidate();
     }
 
     public User getCurrentUser(HttpSession session) {
