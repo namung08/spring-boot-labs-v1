@@ -28,8 +28,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<UserResponse> login(@Valid @RequestBody LoginRequest loginRequest, HttpSession session) {
-        // TODO
-        return null;
+        return ResponseEntity.ok(authService.login(loginRequest, session));
     }
 
     @PostMapping("/logout")

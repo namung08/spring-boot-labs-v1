@@ -37,8 +37,7 @@ public class UserService {
     }
 
     public Optional<User> getUserByUsername(String username) {
-        // TODO
-        return Optional.empty();
+        return userRepository.findByUsername(username);
     }
 
 

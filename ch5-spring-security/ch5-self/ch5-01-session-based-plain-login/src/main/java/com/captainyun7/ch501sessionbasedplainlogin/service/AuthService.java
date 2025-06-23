@@ -27,8 +27,15 @@ public class AuthService {
     }
 
     public UserResponse login(LoginRequest loginRequest, HttpSession session) {
-        // TODO
-        return null;
+        User user = userService.getUserByUsername(loginRequest.getUsername())
+                               .orElseThrow(() -> new RuntimeException("username or password not match"));
+        if(!user.getPassword().equals(loginRequest.getPassword())) {
+            throw new RuntimeException("username or password not match");
+        }
+
+        session.setAttribute(USER_SESSION_KEY, user);
+
+        return UserResponse.fromEntity(user);
     }
 
     public void logout(HttpSession session) {
