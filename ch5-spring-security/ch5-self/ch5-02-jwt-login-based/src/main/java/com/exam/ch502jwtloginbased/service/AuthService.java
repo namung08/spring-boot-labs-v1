@@ -1,9 +1,11 @@
 package com.exam.ch502jwtloginbased.service;
 
 import com.exam.ch502jwtloginbased.dto.LoginRequest;
+import com.exam.ch502jwtloginbased.dto.LoginResponse;
 import com.exam.ch502jwtloginbased.dto.SignUpRequest;
 import com.exam.ch502jwtloginbased.dto.UserResponse;
 import com.exam.ch502jwtloginbased.domain.User;
+import com.exam.ch502jwtloginbased.utils.JwtUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,8 +13,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+    private final JwtUtil jwtUtil;
 
-    private final com.exam.ch502jwtloginbased.service.UserService userService;
+    private final UserService userService;
     private static final String USER_SESSION_KEY = "CURRENT_USER";
 
     public UserResponse register(SignUpRequest signUpRequest) {
@@ -26,16 +29,23 @@ public class AuthService {
         return userService.createUser(signUpRequest);
     }
 
-    public UserResponse login(LoginRequest loginRequest, HttpSession session) {
+    public LoginResponse login(LoginRequest loginRequest) {
         User user = userService.getUserByUsername(loginRequest.getUsername())
                                .orElseThrow(() -> new RuntimeException("username or password not match"));
         if(!user.getPassword().equals(loginRequest.getPassword())) {
             throw new RuntimeException("username or password not match");
         }
 
-        session.setAttribute(USER_SESSION_KEY, user);
+        String token = jwtUtil.createJwt(user);
 
-        return UserResponse.fromEntity(user);
+
+
+        return LoginResponse.builder()
+            .userId(user.getId())
+            .email(user.getEmail())
+            .role(user.getRole())
+            .token(token)
+            .build();
     }
 
     public void logout(HttpSession session) {

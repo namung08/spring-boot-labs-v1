@@ -1,6 +1,7 @@
 package com.exam.ch502jwtloginbased.controller;
 
 import com.exam.ch502jwtloginbased.dto.LoginRequest;
+import com.exam.ch502jwtloginbased.dto.LoginResponse;
 import com.exam.ch502jwtloginbased.dto.SignUpRequest;
 import com.exam.ch502jwtloginbased.dto.UserResponse;
 import com.exam.ch502jwtloginbased.service.AuthService;
@@ -27,8 +28,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@Valid @RequestBody LoginRequest loginRequest, HttpSession session) {
-        return ResponseEntity.ok(authService.login(loginRequest, session));
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(authService.login(loginRequest));
     }
 
     @PostMapping("/logout")
