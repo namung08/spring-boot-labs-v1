@@ -14,12 +14,14 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    
+
     private final UserRepository userRepository;
 
     public UserResponse createUser(SignUpRequest signUpRequest) {
         // TODO
-        return null;
+        User newUser = signUpRequest.toDomain();
+
+        return UserResponse.fromEntity(userRepository.save(newUser));
     }
 
     public List<UserResponse> getAllUsers() {
@@ -41,12 +43,10 @@ public class UserService {
 
 
     public boolean existsByUsername(String username) {
-        // TODO
-        return true;
+        return userRepository.existsByUsername(username);
     }
 
      public boolean existsByEmail(String email) {
-         // TODO
-        return true;
+        return userRepository.existsByEmail(email);
     }
-} 
+}

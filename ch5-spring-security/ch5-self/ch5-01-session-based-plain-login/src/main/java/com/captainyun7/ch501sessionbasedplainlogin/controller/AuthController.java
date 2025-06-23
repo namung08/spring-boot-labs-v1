@@ -18,13 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    
+
     private final AuthService authService;
-    
+
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody SignUpRequest signUpRequest) {
-        // TODO
-        return null;
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(signUpRequest));
     }
 
     @PostMapping("/login")
@@ -38,4 +37,4 @@ public class AuthController {
         // TODO
         return null;
     }
-} 
+}

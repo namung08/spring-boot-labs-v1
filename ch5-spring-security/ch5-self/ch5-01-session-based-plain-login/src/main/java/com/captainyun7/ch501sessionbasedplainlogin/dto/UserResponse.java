@@ -1,6 +1,7 @@
 package com.captainyun7.ch501sessionbasedplainlogin.dto;
 
 import com.captainyun7.ch501sessionbasedplainlogin.domain.User;
+import com.captainyun7.ch501sessionbasedplainlogin.domain.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,12 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UserResponse {
-    
+
     private Long id;
     private String username;
     private String email;
-    private String role;
-    
+    private Role role;
+
     public static UserResponse fromEntity(User user) {
         return UserResponse.builder()
                 .id(user.getId())
@@ -25,4 +26,4 @@ public class UserResponse {
                 .role(user.getRole())
                 .build();
     }
-} 
+}

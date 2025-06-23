@@ -11,13 +11,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    
+
     private final UserService userService;
     private static final String USER_SESSION_KEY = "CURRENT_USER";
 
     public UserResponse register(SignUpRequest signUpRequest) {
-        // TODO
-        return null;
+        if(userService.existsByUsername(signUpRequest.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
+        if(userService.existsByEmail(signUpRequest.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        return userService.createUser(signUpRequest);
     }
 
     public UserResponse login(LoginRequest loginRequest, HttpSession session) {
@@ -32,4 +38,4 @@ public class AuthService {
     public User getCurrentUser(HttpSession session) {
         return (User) session.getAttribute(USER_SESSION_KEY);
     }
-} 
+}

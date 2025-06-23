@@ -1,6 +1,7 @@
 package com.captainyun7.ch501sessionbasedplainlogin.config;
 
 import com.captainyun7.ch501sessionbasedplainlogin.domain.User;
+import com.captainyun7.ch501sessionbasedplainlogin.domain.role.Role;
 import com.captainyun7.ch501sessionbasedplainlogin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -20,7 +21,7 @@ public class DataInitializer implements CommandLineRunner {
                 .username("admin")
                 .password("admin123")
                 .email("admin@example.com")
-                .role("ADMIN")
+                .role(Role.ADMIN)
                 .build();
         userRepository.save(admin);
 
@@ -31,23 +32,23 @@ public class DataInitializer implements CommandLineRunner {
                 .username("user1")
                 .password("user123")
                 .email("user1@example.com")
-                .role("USER")
+                .role(Role.USER)
                 .build();
         userRepository.save(user1);
         User user2 = User.builder()
                 .username("user2")
                 .password("user123")
                 .email("user@example.com")
-                .role("USER")
+                .role(Role.USER)
                 .build();
         userRepository.save(user2);
         User user3 = User.builder()
                 .username("user3")
                 .password("user123")
                 .email("user3@example.com")
-                .role("USER")
+                .role(Role.USER)
                 .build();
         userRepository.save(user3);
 
     }
-} 
+}
