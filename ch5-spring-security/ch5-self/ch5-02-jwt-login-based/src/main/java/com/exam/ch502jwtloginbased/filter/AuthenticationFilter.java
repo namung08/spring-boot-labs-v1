@@ -1,10 +1,10 @@
 package com.exam.ch502jwtloginbased.filter;
 
+import com.exam.ch502jwtloginbased.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -21,22 +21,23 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Component
 public class AuthenticationFilter implements Filter {
+    private final JwtUtil jwtUtil;
 
     private static final String USER_SESSION_KEY = "CURRENT_USER";
     private static final List<String> PUBLIC_PATHS = Arrays.asList(
-            "/swagger-ui",
-            "/v3/api-docs",
-            "/swagger-resources/**",
-            "/api/auth/login",
-            "/api/auth/register",
-            "/h2-console"
+        "/swagger-ui",
+        "/v3/api-docs",
+        "/swagger-resources/**",
+        "/api/auth/login",
+        "/api/auth/register",
+        "/h2-console"
     );
 
     private final ObjectMapper objectMapper;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
+        throws IOException, ServletException {
         // TODO : 필터 로직 작성
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
@@ -45,17 +46,18 @@ public class AuthenticationFilter implements Filter {
         if(isPublicPath(req.getRequestURI())) {
             chain.doFilter(request, response);
         }
-        HttpSession session = req.getSession(false);
+        String authorization = req.getHeader("Authorization");
 
-        // 세션이 없거나 USER_SESSION_KEY를 통해 가져온 정보가 null일 경우
-        if(session == null || session.getAttribute(USER_SESSION_KEY) == null) {
-            // 인증 실패 클라이언트에 반환
-            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            res.setContentType("application/json");
-            res.setCharacterEncoding("UTF-8");
-            Map<String, String> errorRes = Map.of("error", "need auth", "status", "error");
-            res.getWriter().write(objectMapper.writeValueAsString(errorRes));
+        if(authorization == null || !authorization.startsWith("Bearer ")) {
+            unauthorized(res, "need author");
             return;
+        }
+
+        // 인증 실패 클라이언트에 반환
+        authorization = authorization.substring(7);
+
+        if(jwtUtil.isExpired(authorization)) {
+            unauthorized(res, "expired");
         }
 
         log.info("doFilter");
@@ -65,5 +67,15 @@ public class AuthenticationFilter implements Filter {
 
     private boolean isPublicPath(String path) {
         return PUBLIC_PATHS.stream().anyMatch(path::startsWith);
+    }
+
+    private void unauthorized(HttpServletResponse res, String message) throws IOException {
+        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", 401);
+        map.put("msg", message);
+        res.getWriter().write(objectMapper.writeValueAsString(map));
     }
 }

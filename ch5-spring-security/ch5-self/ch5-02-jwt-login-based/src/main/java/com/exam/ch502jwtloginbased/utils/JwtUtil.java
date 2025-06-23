@@ -1,6 +1,7 @@
 package com.exam.ch502jwtloginbased.utils;
 
 import com.exam.ch502jwtloginbased.domain.User;
+import com.exam.ch502jwtloginbased.domain.role.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -31,12 +32,20 @@ public class JwtUtil {
   return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("username",String.class);
  }
 
- public String getRole(String token) {
-  return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("role",String.class);
+// public String getRole(String token) {
+//  return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("role",String.class);
+// }
+
+ public Role getRole(String token) {
+  return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("role",Role.class);
  }
 
  public Boolean isExpired(String token) {
   return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getExpiration().before(new Date());
+ }
+
+ public Boolean validateToken(String token) {
+  return !isExpired(token);
  }
 
  public String createJwt(User user) {

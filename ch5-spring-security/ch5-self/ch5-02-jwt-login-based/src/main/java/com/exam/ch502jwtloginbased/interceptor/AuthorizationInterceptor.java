@@ -2,6 +2,7 @@ package com.exam.ch502jwtloginbased.interceptor;
 
 import com.exam.ch502jwtloginbased.domain.User;
 import com.exam.ch502jwtloginbased.domain.role.Role;
+import com.exam.ch502jwtloginbased.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     private static final String USER_SESSION_KEY = "CURRENT_USER";
     private final ObjectMapper objectMapper;
+    private final JwtUtil jwtUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -27,26 +29,26 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         // TODO : 인터셉터 로직 작성
         String path = request.getRequestURI();
         if(path.startsWith("/api/admin")){
-            HttpSession session = request.getSession();
-            if(session == null) {
-                sendUnauthorizedResponse(response, "Unauthorized");
-                return false;
-            }
-            try {
-                User attribute = (User) session.getAttribute(USER_SESSION_KEY);
-                if(attribute == null) {
-                    sendUnauthorizedResponse(response, "Unauthorized");
-                    return false;
-                }
-                if(!attribute.getRole().equals(Role.ADMIN)) {
-                    sendForbiddenResponse(response, "Forbidden need Admin");
-                    return false;
-                }
-            } catch (ClassCastException e) {
-                throw new ClassCastException("Current user attribute is not of type User");
+            String token = request.getHeader("Authorization");
+            if(token != null && token.startsWith("Bearer ")) {
+                token =  token.substring(7);
             }
 
-            return false;
+            if(token == null) {
+                sendUnauthorizedResponse(response, "need token");
+                return false;
+            }
+
+            if(!jwtUtil.isExpired(token)) {
+                sendUnauthorizedResponse(response, "expired");
+                return false;
+            }
+
+            Role role = jwtUtil.getRole(token);
+            if(!role.equals(Role.ADMIN)){
+                sendForbiddenResponse(response, "forbidden");
+                return false;
+            }
         }
 
         return true;
