@@ -49,7 +49,7 @@ public class JwtUtil {
     private Claims getAllClaimsFromToken(String token) {
         // TODO: 토큰에서 모든 클레임을 추출합니다.
         // Jwts.parserBuilder()를 사용하여 파서를 만들고, 서명 키를 설정한 후 토큰을 파싱하여 본문(claims)을 가져옵니다.
-        return null;
+        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -81,6 +81,7 @@ public class JwtUtil {
     public Boolean validateToken(String token, UserDetails userDetails) {
         // TODO: 토큰의 유효성을 검사합니다.
         // 토큰에서 추출한 사용자 이름이 userDetails의 사용자 이름과 일치하는지, 그리고 토큰이 만료되지 않았는지 확인합니다.
-        return null;
+        String username = getUsernameFromToken(token);
+        return (username.equals(userDetails.getUsername()) &&  !isTokenExpired(token));
     }
 }
