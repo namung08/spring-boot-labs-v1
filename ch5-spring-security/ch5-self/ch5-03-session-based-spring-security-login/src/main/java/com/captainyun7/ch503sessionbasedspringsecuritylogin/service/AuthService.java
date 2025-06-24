@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    
+
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
@@ -29,22 +29,24 @@ public class AuthService {
         if (userService.existsByUsername(signUpRequest.getUsername())) {
             throw new RuntimeException("이미 사용 중인 사용자 이름입니다");
         }
-        
+
         // 이메일 중복 검사
         if (userService.existsByEmail(signUpRequest.getEmail())) {
             throw new RuntimeException("이미 사용 중인 이메일입니다");
         }
 
         signUpRequest.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-        
+
         return userService.createUser(signUpRequest);
     }
 
     public UserResponse login(LoginRequest loginRequest) {
         // TODO: [2] AuthenticationManager를 사용하여 사용자를 인증합니다.
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         // TODO: [3] 인증에 성공하면 SecurityContext에 인증 정보를 저장합니다.
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
         // TODO: [4] 인증된 사용자 정보를 반환합니다.
-        return null;
+        return userService.getUserResponseByUsername(loginRequest.getUsername());
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response) {
@@ -60,7 +62,7 @@ public class AuthService {
         if (authentication == null || !authentication.isAuthenticated()) {
             return null;
         }
-        
+
         return userService.getUserByUsername(authentication.getName()).orElse(null);
     }
-} 
+}
