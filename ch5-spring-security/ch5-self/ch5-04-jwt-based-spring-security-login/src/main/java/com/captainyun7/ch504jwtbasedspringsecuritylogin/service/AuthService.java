@@ -7,6 +7,8 @@ import com.captainyun7.ch504jwtbasedspringsecuritylogin.dto.LoginRequest;
 import com.captainyun7.ch504jwtbasedspringsecuritylogin.dto.SignUpRequest;
 import com.captainyun7.ch504jwtbasedspringsecuritylogin.dto.UserResponse;
 import com.captainyun7.ch504jwtbasedspringsecuritylogin.util.JwtUtil;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    
+
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -33,27 +35,34 @@ public class AuthService {
         if (userService.existsByUsername(signUpRequest.getUsername())) {
             throw new RuntimeException("이미 사용 중인 사용자 이름입니다");
         }
-        
+
         // 이메일 중복 검사
         if (userService.existsByEmail(signUpRequest.getEmail())) {
             throw new RuntimeException("이미 사용 중인 이메일입니다");
         }
-        
+
         // 비밀번호 암호화
         signUpRequest.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-        
+
         return userService.createUser(signUpRequest);
     }
 
     @Transactional
-    public JwtResponse login(LoginRequest loginRequest) {
+    public JwtResponse login(LoginRequest loginRequest, HttpServletResponse res) {
         // TODO: 로그인 로직을 구현합니다.
         // 1. AuthenticationManager를 사용하여 사용자 인증을 수행합니다.
         //    - UsernamePasswordAuthenticationToken을 생성하여 사용자의 아이디와 비밀번호를 담습니다.
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         // 2. 인증에 성공하면, SecurityContextHolder에 인증 정보를 저장합니다.
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
         // 3. 인증된 사용자 정보를 기반으로 Access Token(JwtUtil.generateToken)과 Refresh Token(RefreshTokenService.createRefreshToken)을 생성합니다.
+        UserDetails principal = (UserDetails) authenticate.getPrincipal();
+        String accessToken = jwtUtil.generateToken(principal);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(loginRequest.getUsername());
         // 4. 생성된 토큰들을 JwtResponse DTO에 담아 반환합니다.
-        return null;
+        res.addHeader("Authorization", "Bearer " + accessToken);
+        res.addCookie(new Cookie("refresh_token", refreshToken.getToken()));
+        return new JwtResponse(accessToken, refreshToken.getToken());
     }
 
     public User getCurrentUser() {
@@ -70,7 +79,7 @@ public class AuthService {
 
         return null;
     }
-    
+
     public String refreshAccessToken(String refreshToken) {
         // TODO: Refresh Token을 사용하여 새로운 Access Token을 발급하는 로직을 구현합니다.
         // 1. RefreshTokenService를 사용하여 데이터베이스에서 Refresh Token을 찾습니다.
@@ -89,4 +98,4 @@ public class AuthService {
         String username = userDetails.getUsername();
         refreshTokenService.deleteByUsername(username);
     }
-} 
+}

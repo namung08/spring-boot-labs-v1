@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Component
@@ -25,7 +27,7 @@ public class JwtUtil {
 
     @Value("${jwt.refresh-expiration}")
     private Long refreshExpiration;
-    
+
     private Key getSigningKey() {
         byte[] keyBytes = secret.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
@@ -65,9 +67,15 @@ public class JwtUtil {
 
     private String doGenerateToken(String username, long expirationTime) {
         // TODO: 사용자 이름과 만료 시간을 기반으로 JWT를 생성합니다.
+        Claims claim = Jwts.claims().setSubject(username);
         // Claims를 설정하고(setSubject), Jwts.builder()를 사용하여 토큰을 빌드합니다.
         // 발급 시간(setIssuedAt), 만료 시간(setExpiration), 서명(signWith)을 설정해야 합니다.
-        return null;
+        return Jwts.builder()
+            .setClaims(claim)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + expirationTime * 1000))
+            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
@@ -75,4 +83,4 @@ public class JwtUtil {
         // 토큰에서 추출한 사용자 이름이 userDetails의 사용자 이름과 일치하는지, 그리고 토큰이 만료되지 않았는지 확인합니다.
         return null;
     }
-} 
+}

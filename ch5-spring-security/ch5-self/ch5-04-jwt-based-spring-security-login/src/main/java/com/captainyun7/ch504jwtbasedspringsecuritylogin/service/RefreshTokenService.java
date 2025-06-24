@@ -1,26 +1,33 @@
 package com.captainyun7.ch504jwtbasedspringsecuritylogin.service;
 
 import com.captainyun7.ch504jwtbasedspringsecuritylogin.domain.RefreshToken;
+import com.captainyun7.ch504jwtbasedspringsecuritylogin.domain.User;
 import com.captainyun7.ch504jwtbasedspringsecuritylogin.repository.RefreshTokenRepository;
 import com.captainyun7.ch504jwtbasedspringsecuritylogin.repository.UserRepository;
+import com.captainyun7.ch504jwtbasedspringsecuritylogin.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class RefreshTokenService {
 
+    private final JwtUtil jwtUtil;
     @Value("${jwt.refresh-expiration}")
     private Long refreshTokenDurationMs;
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
 
-    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
+    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository, JwtUtil jwtUtil) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     public Optional<RefreshToken> findByToken(String token) {
@@ -31,13 +38,23 @@ public class RefreshTokenService {
     public RefreshToken createRefreshToken(String username) {
         // TODO: 사용자 이름(username)을 기반으로 새로운 Refresh Token을 생성하고 저장하는 로직을 구현합니다.
         // 1. UserRepository를 사용하여 사용자 정보를 조회합니다. 사용자가 없으면 예외를 발생시킵니다.
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("not found for username: " + username));
         // 2. 해당 사용자의 기존 Refresh Token이 있다면 삭제합니다(선택 사항이지만 권장).
+        RefreshToken refreshToken = refreshTokenRepository.findByUser_Id(user.getId()).orElse(null);
+        if(refreshToken != null){
+            refreshTokenRepository.delete(refreshToken);
+        }
         // 3. 새로운 RefreshToken 객체를 생성합니다.
         //    - 사용자 정보(User) 설정
         //    - 만료 시간 설정 (현재 시간 + `refreshTokenDurationMs`)
         //    - UUID를 사용하여 랜덤 토큰 문자열 생성
+        refreshToken = new RefreshToken();
+        refreshToken.setUser(user);
+        // Instant.now() 를 사용해 서버의 현재 시각을 가져와 refreshTokenDurationMs를 더한다.
+        refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs*1000));
+        refreshToken.setToken(UUID.randomUUID().toString());
         // 4. 생성된 Refresh Token을 RefreshTokenRepository를 통해 데이터베이스에 저장하고 반환합니다.
-        return null;
+        return refreshTokenRepository.save(refreshToken);
     }
 
     public RefreshToken verifyExpiration(RefreshToken token) {
@@ -55,4 +72,4 @@ public class RefreshTokenService {
             return 1;
         }).orElse(0);
     }
-} 
+}

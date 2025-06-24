@@ -2,6 +2,7 @@ package com.captainyun7.ch504jwtbasedspringsecuritylogin.controller;
 
 import com.captainyun7.ch504jwtbasedspringsecuritylogin.dto.*;
 import com.captainyun7.ch504jwtbasedspringsecuritylogin.service.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
-        JwtResponse jwtResponse = authService.login(loginRequest);
+    public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse res) {
+        JwtResponse jwtResponse = authService.login(loginRequest, res);
         return ResponseEntity.ok(jwtResponse);
     }
 
