@@ -84,12 +84,22 @@ public class AuthService {
         // TODO: Refresh Token을 사용하여 새로운 Access Token을 발급하는 로직을 구현합니다.
         // 1. RefreshTokenService를 사용하여 데이터베이스에서 Refresh Token을 찾습니다.
         //    - `findByToken()`
-        // 2. 토큰이 유효한지 검증합니다.
-        //    - `verifyExpiration()`
-        // 3. 토큰과 연관된 사용자 정보를 가져옵니다.
-        // 4. 새로운 Access Token을 생성합니다(JwtUtil.generateToken).
-        // 5. 토큰을 찾을 수 없거나 유효하지 않은 경우 예외를 발생시킵니다.
-        return null;
+        return refreshTokenService.findByToken(refreshToken)
+            // 2. 토큰이 유효한지 검증합니다.
+            //    - `verifyExpiration()`
+            .map(refreshTokenService::verifyExpiration)
+            // 3. 토큰과 연관된 사용자 정보를 가져옵니다.
+            .map(RefreshToken::getUser)
+            // 4. 새로운 Access Token을 생성합니다(JwtUtil.generateToken).
+            .map(user -> jwtUtil.generateToken(
+                org.springframework.security.core.userdetails.User
+                    .withUsername(user.getUsername())
+                    .password(user.getPassword())
+                    .authorities(user.getRole())
+                    .build()
+            ))
+            // 5. 토큰을 찾을 수 없거나 유효하지 않은 경우 예외를 발생시킵니다.
+            .orElseThrow(() -> new RuntimeException("refreshToken is not found!"));
     }
 
     @Transactional

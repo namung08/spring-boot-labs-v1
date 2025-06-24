@@ -60,9 +60,14 @@ public class RefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken token) {
         // TODO: 토큰의 만료 시간을 검증하는 로직을 구현합니다.
         // 1. 토큰의 만료 시간(`getExpiryDate()`)이 현재 시간(`Instant.now()`)보다 이전인지 확인합니다.
-        // 2. 만료되었다면, 데이터베이스에서 해당 토큰을 삭제하고 예외를 발생시킵니다.
+        if(token.getExpiryDate().isBefore(Instant.now())){
+            // 2. 만료되었다면, 데이터베이스에서 해당 토큰을 삭제하고
+            refreshTokenRepository.delete(token);
+            // 예외를 발생시킵니다.
+            throw new RuntimeException("token expired");
+        }
         // 3. 만료되지 않았다면, 원래의 토큰을 그대로 반환합니다.
-        return null;
+        return token;
     }
 
     @Transactional
