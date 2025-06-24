@@ -3,6 +3,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/post_db
     username: root
     password: pass1234
+  jwt:
+    secret: 0a2ad987e494e34ee966cf47cf1fb37d4c030de15272ddb2cf9f33fe0732c22ba6e1d209e5836b6835a2fcff16eefa4bad93dcbec53810f7952c58206cba12d3
+    access_expire_second: 20
+    refresh_expire_hour: 1
 
   jpa:
     hibernate:
