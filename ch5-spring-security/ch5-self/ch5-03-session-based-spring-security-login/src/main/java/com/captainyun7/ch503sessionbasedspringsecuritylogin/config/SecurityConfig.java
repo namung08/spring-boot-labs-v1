@@ -22,7 +22,13 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             // TODO: [1] URL별 접근 권한을 설정합니다.
-//            .authorizeHttpRequests((
+            .authorizeHttpRequests(auth -> auth
+                // /api/auth/** 이 주소는 인증이 되지 않은 사용자도 접근이 가능
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                // 이외의 주소는 인증된 사용자만 가능
+                .anyRequest().authenticated()
+            )
 
             .formLogin(form -> form.disable())
             .httpBasic(basic -> basic.disable())

@@ -17,22 +17,23 @@ import java.util.List;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
-    
+
     private final UserService userService;
     private final AuthService authService;
-    
+
     @GetMapping("/me")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserResponse> getCurrentUser() {
         return ResponseEntity.ok(UserResponse.fromEntity(authService.getCurrentUser()));
     }
-    
+
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
-} 
+}
