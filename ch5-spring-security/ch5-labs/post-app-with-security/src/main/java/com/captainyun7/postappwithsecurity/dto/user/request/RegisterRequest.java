@@ -13,10 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AllArgsConstructor
 @Builder
 public class RegisterRequest {
- @NotNull
  @NotBlank
  private String username;
- @NotNull
  @NotBlank
  private String password;
 

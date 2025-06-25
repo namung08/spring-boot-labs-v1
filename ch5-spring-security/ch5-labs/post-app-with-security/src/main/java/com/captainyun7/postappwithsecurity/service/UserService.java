@@ -1,5 +1,6 @@
 package com.captainyun7.postappwithsecurity.service;
 
+import com.captainyun7.postappwithsecurity.domain.User;
 import com.captainyun7.postappwithsecurity.dto.user.request.RegisterRequest;
 import com.captainyun7.postappwithsecurity.dto.user.response.UserResponse;
 import com.captainyun7.postappwithsecurity.repository.UserRepository;
@@ -7,6 +8,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,5 +22,9 @@ public class UserService {
 
  public UserResponse createUser(RegisterRequest req) {
   return UserResponse.of(repository.save(req.to()));
+ }
+
+ public Optional<User> getUserByUsername(String username) {
+  return repository.findByUsername(username);
  }
 }
