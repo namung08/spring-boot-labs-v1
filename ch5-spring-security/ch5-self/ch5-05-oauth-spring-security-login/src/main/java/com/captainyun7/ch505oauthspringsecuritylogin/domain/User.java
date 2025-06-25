@@ -13,19 +13,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class User {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String username;
     private String password;
     private String email;
     private String role; // "USER", "ADMIN"
-    
+
     // OAuth2 관련 필드
-    private String provider; // "github", "google" 등
+    private String provider; // "github", "google" 등 oauth 로그인 제공자
     private String providerId; // OAuth2 공급자에서 제공하는 고유 ID
     private String name; // 사용자 실명
     private String imageUrl; // 프로필 이미지 URL
-} 
+}
