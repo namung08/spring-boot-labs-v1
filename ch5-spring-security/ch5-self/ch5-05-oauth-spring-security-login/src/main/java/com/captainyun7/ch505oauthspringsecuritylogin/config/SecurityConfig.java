@@ -53,6 +53,12 @@ public class SecurityConfig {
                     // 로그인 실패 시 실행할 핸들러 지정
                     // 예: 에러 로그 기록, 실패 응답 전송, 로그인 페이지로 리다이렉트 등
                     .failureHandler(oAuth2AuthenticationFailureHandler)
+                    .authorizationEndpoint(authorization ->
+                        authorization.baseUri("/oauth2/authorize")
+                    )
+                    .redirectionEndpoint(redirection ->
+                        redirection.baseUri("/login/oauth2/code/*")
+                        )
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         ;

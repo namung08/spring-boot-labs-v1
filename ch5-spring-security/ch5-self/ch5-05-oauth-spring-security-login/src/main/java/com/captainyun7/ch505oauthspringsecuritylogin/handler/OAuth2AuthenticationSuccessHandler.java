@@ -33,51 +33,53 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final RefreshTokenService refreshTokenService;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, 
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                        Authentication authentication) throws IOException, ServletException {
         String email;
 
         // TODO : 유저 정보 가져오기
-        Object principal = null;
-        
-        if (principal instanceof OidcUser) {
-            OidcUser oidcUser = (OidcUser) principal;
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof OidcUser oidcUser) {
             email = oidcUser.getEmail();
-        } else if (principal instanceof OAuth2User) {
-            OAuth2User oAuth2User = (OAuth2User) principal;
+        } else if (principal instanceof OAuth2User oAuth2User) {
             email = (String) oAuth2User.getAttributes().get("email");
         } else {
             getRedirectStrategy().sendRedirect(request, response, "/login?error=unsupported_principal_type");
             return;
         }
-        
+
         if (email == null || email.isEmpty()) {
             getRedirectStrategy().sendRedirect(request, response, "/login?error=email_not_found");
             return;
         }
-        
+
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isEmpty()) {
             getRedirectStrategy().sendRedirect(request, response, "/login?error=user_not_found");
             return;
         }
-        
+
         User user = userOptional.get();
-        
+
         // TODO : JWT 토큰 생성
-        UserDetails userDetails = null;
+        UserDetails userDetails = org.springframework.security.core.userdetails.User
+            .withUsername(user.getUsername())
+            .password(user.getPassword() != null ? user.getPassword() : "")
+            .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())))
+            .build();
 
         String accessToken = jwtUtil.generateToken(userDetails);
-        
+
         // 리프레시 토큰 생성
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getUsername());
-        
+
         // 리다이렉트 URL
         String targetUrl = UriComponentsBuilder.fromUriString("/oauth2/redirect")
             .queryParam("token", accessToken)
             .queryParam("refreshToken", refreshToken.getToken())
             .build().toUriString();
-        
+
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
-} 
+}
