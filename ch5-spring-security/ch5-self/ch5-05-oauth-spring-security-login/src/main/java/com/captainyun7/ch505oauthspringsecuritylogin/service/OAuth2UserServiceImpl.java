@@ -31,38 +31,43 @@ public class OAuth2UserServiceImpl extends OidcUserService {
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
 
         OidcUser oidcUser = super.loadUser(userRequest);
-        
+
         try {
             // TODO : 사용자 정보 처리
-            User user = null;
-            
+            User user = processUserInfo(oidcUser.getAttributes());
+
             // TODO : OIDC 사용자 반환
-            return null;
+            return new DefaultOidcUser(
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole())),
+                oidcUser.getIdToken(),
+                oidcUser.getUserInfo(),
+                "sub"
+            );
         } catch (AuthenticationException ex) {
             throw ex;
         } catch (Exception ex) {
             throw new InternalAuthenticationServiceException("인증 처리 중 오류 발생", ex);
         }
     }
-    
+
     private User processUserInfo(Map<String, Object> attributes) {
         GoogleOAuth2UserInfo userInfo = new GoogleOAuth2UserInfo(attributes);
-        
+
         if (!StringUtils.hasText(userInfo.getEmail())) {
             throw new OAuth2AuthenticationException("이메일을 찾을 수 없습니다");
         }
 
         Optional<User> userOptional = userRepository.findByEmail(userInfo.getEmail());
-        
+
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (!user.getProvider().equals("google")) {
                 throw new OAuth2AuthenticationException("이미 다른 공급자로 가입한 이메일입니다: " + user.getProvider());
             }
             // TODO : 분기 처리
-            return null;
+            return updateExistingUser(user, userInfo);
         } else {
-            return null;
+            return registerNewUser(userInfo);
         }
     }
 
@@ -76,7 +81,7 @@ public class OAuth2UserServiceImpl extends OidcUserService {
                 .imageUrl(userInfo.getImageUrl())
                 .role("USER")
                 .build();
-        
+
         return userRepository.save(user);
     }
 
